@@ -67,6 +67,32 @@ Production-ready multi-class school RFID attendance platform for ESP32 devices.
 5. Verify attendance appears in `/dashboard/attendance`.
 6. Verify CSV export works from `/dashboard/attendance`.
 
+### Fix for Vercel `404 NOT_FOUND`
+
+If Vercel shows:
+- `This page doesn’t exist`
+- `404 NOT_FOUND`
+
+check these settings and redeploy:
+
+1. **Project Root Directory**
+   - Vercel Project Settings -> General -> Root Directory
+   - Keep it as repository root (`.`), not a subfolder.
+2. **Production Branch**
+   - Vercel Project Settings -> Git -> Production Branch
+   - Set to the branch that contains this Next.js app code, or merge your feature branch into that production branch first.
+3. **Framework Preset**
+   - Vercel Project Settings -> Build & Development Settings
+   - Ensure Framework is **Next.js**.
+4. **Environment Variables**
+   - Confirm all 3 variables exist in Vercel:
+     - `NEXT_PUBLIC_SUPABASE_URL`
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+     - `SUPABASE_SERVICE_ROLE_KEY`
+5. **Redeploy**
+   - Trigger a fresh deployment from the latest commit.
+   - Verify the deployment URL opens `/`, `/login`, and `/signup`.
+
 ## Implemented Routes
 - `/signup`, `/login` for admin auth
 - `/onboarding` (school name + class count first-login wizard)
