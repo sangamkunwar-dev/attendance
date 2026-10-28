@@ -27,6 +27,46 @@ Production-ready multi-class school RFID attendance platform for ESP32 devices.
    npm run dev
    ```
 
+## Production Deployment (Vercel + Supabase)
+
+1. Create a production Supabase project.
+2. In Supabase SQL Editor, run:
+   - `/home/runner/work/attendance/attendance/supabase/schema.sql`
+3. Copy these Supabase project keys:
+   - `NEXT_PUBLIC_SUPABASE_URL`
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - `SUPABASE_SERVICE_ROLE_KEY`
+4. Push this repository to GitHub (if not already pushed).
+5. Deploy on Vercel:
+   - Create a new project and import `sangamkunwar-dev/attendance`
+   - Keep framework as Next.js
+   - Add the 3 environment variables above in Vercel Project Settings
+   - Deploy
+6. Configure Supabase Auth URLs:
+   - Supabase Dashboard -> Auth -> URL Configuration
+   - Site URL: `https://your-app.vercel.app`
+   - Redirect URLs:
+     - `https://your-app.vercel.app/login`
+     - `https://your-app.vercel.app/signup`
+     - `https://your-app.vercel.app/student/login`
+7. Point ESP32 firmware requests to:
+   - `https://your-app.vercel.app/api/esp/attendance`
+   - Use the per-class `device_token` generated in dashboard.
+
+### Post-Deployment Smoke Test
+
+1. Create an admin account (`/signup`).
+2. Complete onboarding.
+3. Create a class and copy its `device_token`.
+4. Send a test POST request:
+   ```bash
+   curl -X POST https://your-app.vercel.app/api/esp/attendance \
+     -H "Content-Type: application/json" \
+     -d '{"device_token":"<CLASS_DEVICE_TOKEN>","card_uid":"<RFID_UID>"}'
+   ```
+5. Verify attendance appears in `/dashboard/attendance`.
+6. Verify CSV export works from `/dashboard/attendance`.
+
 ## Implemented Routes
 - `/signup`, `/login` for admin auth
 - `/onboarding` (school name + class count first-login wizard)
